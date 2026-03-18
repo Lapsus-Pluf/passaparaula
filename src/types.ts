@@ -35,4 +35,4 @@ export interface GameStats {
 }
 
 /** Screen the app is showing */
-export type AppScreen = 'welcome' | 'game' | 'results'
+export type AppScreen = 'welcome' | 'game'

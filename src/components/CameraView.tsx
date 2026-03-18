@@ -1,25 +1,12 @@
-import { useEffect } from 'react'
 import './CameraView.css'
 
 interface CameraViewProps {
-  videoRef: React.RefObject<HTMLVideoElement | null>
+  setVideoRef: (el: HTMLVideoElement | null) => void
   isActive: boolean
   onToggle: () => void
 }
 
-export function CameraView({ videoRef, isActive, onToggle }: CameraViewProps) {
-  useEffect(() => {
-    if (isActive && videoRef.current && videoRef.current.srcObject) {
-      videoRef.current.play().catch(() => {
-        /* autoplay may be blocked */
-      })
-    }
-  }, [isActive, videoRef])
-
-  const setVideoRef = (el: HTMLVideoElement | null) => {
-    (videoRef as React.MutableRefObject<HTMLVideoElement | null>).current = el
-  }
-
+export function CameraView({ setVideoRef, isActive, onToggle }: CameraViewProps) {
   return (
     <div className="camera-view" onClick={onToggle}>
       {isActive ? (

@@ -4,9 +4,23 @@ interface QuestionDisplayProps {
   question: string | null
   letter: string | null
   isPaused: boolean
+  isIdle: boolean
+  isFinished: boolean
 }
 
-export function QuestionDisplay({ question, letter, isPaused }: QuestionDisplayProps) {
+export function QuestionDisplay({ question, letter, isPaused, isIdle, isFinished }: QuestionDisplayProps) {
+  if (isIdle) {
+    return null
+  }
+
+  if (isFinished) {
+    return (
+      <div className="question-display question-finished">
+        Joc finalitzat
+      </div>
+    )
+  }
+
   if (isPaused) {
     return (
       <div className="question-display question-paused">
@@ -19,7 +33,7 @@ export function QuestionDisplay({ question, letter, isPaused }: QuestionDisplayP
   if (!question || !letter) {
     return (
       <div className="question-display question-empty">
-        Prem <kbd>Enter</kbd> o el botó per començar
+        Esperant...
       </div>
     )
   }

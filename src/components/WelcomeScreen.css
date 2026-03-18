@@ -148,7 +148,6 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-family: inherit;
-  margin-bottom: 1.5rem;
 }
 
 .start-button:hover:not(:disabled) {
@@ -159,6 +158,12 @@
 .start-button:disabled {
   opacity: 0.35;
   cursor: not-allowed;
+}
+
+.welcome-footer {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .template-link {

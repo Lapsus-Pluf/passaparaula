@@ -131,6 +131,65 @@
   box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
 
+/* Finished panel */
+.finished-panel {
+  text-align: center;
+  padding: 1rem;
+  border-radius: 12px;
+  background: rgba(102, 126, 234, 0.08);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.finished-title {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea, #f1c40f);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.btn-play-again {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  font-size: 0.95rem;
+  padding: 0.7rem 1.5rem;
+}
+
+.btn-play-again:hover {
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* Pause-on-action toggle */
+.pause-on-action-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid #1a2444;
+  transition: background 0.2s;
+}
+
+.pause-on-action-toggle:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.pause-on-action-toggle input[type="checkbox"] {
+  accent-color: #667eea;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.toggle-label {
+  font-size: 0.8rem;
+  color: #8892b0;
+}
+
 /* Keyboard legend */
 .keyboard-legend {
   padding: 1rem;

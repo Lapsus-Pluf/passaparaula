@@ -33,6 +33,12 @@
   gap: 0.5rem;
 }
 
+.question-finished {
+  color: #667eea;
+  justify-content: center;
+  font-weight: 600;
+}
+
 .question-pause-icon {
   font-size: 1.2rem;
 }

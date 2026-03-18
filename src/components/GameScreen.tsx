@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import type { QuestionsFile } from '../types'
 import { useGame } from '../hooks/useGame'
 import { useTimer } from '../hooks/useTimer'
@@ -10,16 +10,26 @@ import { Timer } from './Timer'
 import { Controls } from './Controls'
 import './GameScreen.css'
 
+interface AnswerLogEntry {
+  letter: string
+  answer: string
+  status: 'correct' | 'incorrect'
+}
+
 interface GameScreenProps {
   questionsFile: QuestionsFile
   initialTime: number
-  onFinish: (results: { letters: ReturnType<typeof useGame>['letters']; stats: ReturnType<typeof useGame>['stats']; timeLeft: number }) => void
+  onFinish: () => void
 }
 
 export function GameScreen({ questionsFile, initialTime, onFinish }: GameScreenProps) {
   const game = useGame(questionsFile.letters)
   const timer = useTimer(initialTime, game.finish)
   const camera = useCamera()
+  const [pauseOnAction, setPauseOnAction] = useState(false)
+  const [answerLog, setAnswerLog] = useState<AnswerLogEntry[]>([])
+  const [isFinished, setIsFinished] = useState(false)
+  const pendingPauseRef = useRef(false)
 
   // Sync timer with game phase
   useEffect(() => {
@@ -30,17 +40,22 @@ export function GameScreen({ questionsFile, initialTime, onFinish }: GameScreenP
     }
   }, [game.phase, timer])
 
-  // When game finishes, notify parent
+  // Pause-on-action: after an action completes and state updates, apply the pause
   useEffect(() => {
-    if (game.phase === 'finished') {
+    if (pendingPauseRef.current && game.phase === 'playing') {
+      pendingPauseRef.current = false
+      game.pause()
       timer.pause()
-      onFinish({
-        letters: game.letters,
-        stats: game.stats,
-        timeLeft: timer.timeLeft,
-      })
     }
-  }, [game.phase]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [game.currentIndex, game.phase, game, timer])
+
+  // When game finishes, show inline results (don't auto-jump)
+  useEffect(() => {
+    if (game.phase === 'finished' && !isFinished) {
+      timer.pause()
+      setIsFinished(true)
+    }
+  }, [game.phase, isFinished, timer])
 
   // Start game: start both game state and timer
   const handleStart = useCallback(() => {
@@ -59,6 +74,52 @@ export function GameScreen({ questionsFile, initialTime, onFinish }: GameScreenP
     timer.resume()
   }, [game, timer])
 
+  // Action handlers with pause-on-action support
+  const handleCorrect = useCallback(() => {
+    if (game.phase !== 'playing') return
+    const current = game.currentQuestion
+    if (current) {
+      setAnswerLog((prev) => [
+        ...prev,
+        { letter: current.letter, answer: current.answer, status: 'correct' },
+      ])
+    }
+    if (pauseOnAction) {
+      pendingPauseRef.current = true
+    }
+    game.markCorrect()
+  }, [game, pauseOnAction])
+
+  const handleIncorrect = useCallback(() => {
+    if (game.phase !== 'playing') return
+    const current = game.currentQuestion
+    if (current) {
+      setAnswerLog((prev) => [
+        ...prev,
+        { letter: current.letter, answer: current.answer, status: 'incorrect' },
+      ])
+    }
+    if (pauseOnAction) {
+      pendingPauseRef.current = true
+    }
+    game.markIncorrect()
+  }, [game, pauseOnAction])
+
+  const handlePass = useCallback(() => {
+    if (game.phase !== 'playing') return
+    if (pauseOnAction) {
+      pendingPauseRef.current = true
+    }
+    game.passLetter()
+  }, [game, pauseOnAction])
+
+  // Determine finish reason
+  const finishReason: 'timeout' | 'completed' = timer.timeLeft <= 0 ? 'timeout' : 'completed'
+
+  const handlePlayAgain = useCallback(() => {
+    onFinish()
+  }, [onFinish])
+
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -72,13 +133,13 @@ export function GameScreen({ questionsFile, initialTime, onFinish }: GameScreenP
         handleStart()
       } else if (key === 'b' && game.phase === 'playing') {
         e.preventDefault()
-        game.markCorrect()
+        handleCorrect()
       } else if (key === 'm' && game.phase === 'playing') {
         e.preventDefault()
-        game.markIncorrect()
+        handleIncorrect()
       } else if (key === 'p' && game.phase === 'playing') {
         e.preventDefault()
-        game.passLetter()
+        handlePass()
       } else if (key === ' ') {
         e.preventDefault()
         if (game.phase === 'playing') {
@@ -91,7 +152,7 @@ export function GameScreen({ questionsFile, initialTime, onFinish }: GameScreenP
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [game, handleStart, handlePause, handleResume])
+  }, [game, handleStart, handlePause, handleResume, handleCorrect, handleIncorrect, handlePass])
 
   return (
     <div className="game-screen">
@@ -100,6 +161,8 @@ export function GameScreen({ questionsFile, initialTime, onFinish }: GameScreenP
           question={game.currentQuestion?.question ?? null}
           letter={game.currentQuestion?.letter ?? null}
           isPaused={game.phase === 'paused'}
+          isIdle={game.phase === 'idle'}
+          isFinished={isFinished}
         />
       </div>
 
@@ -110,7 +173,7 @@ export function GameScreen({ questionsFile, initialTime, onFinish }: GameScreenP
             currentIndex={game.currentIndex}
             cameraElement={
               <CameraView
-                videoRef={camera.videoRef}
+                setVideoRef={camera.setVideoElement}
                 isActive={camera.isActive}
                 onToggle={camera.toggle}
               />
@@ -123,13 +186,36 @@ export function GameScreen({ questionsFile, initialTime, onFinish }: GameScreenP
           <Controls
             phase={game.phase}
             stats={game.stats}
+            isFinished={isFinished}
             onStart={handleStart}
-            onCorrect={game.markCorrect}
-            onIncorrect={game.markIncorrect}
-            onPass={game.passLetter}
+            onCorrect={handleCorrect}
+            onIncorrect={handleIncorrect}
+            onPass={handlePass}
             onPause={handlePause}
             onResume={handleResume}
+            pauseOnAction={pauseOnAction}
+            onTogglePauseOnAction={() => setPauseOnAction((prev) => !prev)}
+            onPlayAgain={handlePlayAgain}
+            finishReason={finishReason}
           />
+
+          {/* Answer log */}
+          {answerLog.length > 0 && (
+            <div className="answer-log">
+              <h4 className="answer-log-title">Respostes</h4>
+              <div className="answer-log-list">
+                {answerLog.map((entry, i) => (
+                  <div
+                    key={i}
+                    className={`answer-log-item answer-log-${entry.status}`}
+                  >
+                    <span className="answer-log-letter">{entry.letter}</span>
+                    <span className="answer-log-answer">{entry.answer}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

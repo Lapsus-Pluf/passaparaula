@@ -139,16 +139,18 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
           onClick={handleStart}
           disabled={!data}
         >
-          Comencen!
+          Començar
         </button>
 
-        <a
-          href="/template.json"
-          download="template.json"
-          className="template-link"
-        >
-          Descarrega la plantilla JSON
-        </a>
+        <div className="welcome-footer">
+          <a
+            href="/template.json"
+            download="template.json"
+            className="template-link"
+          >
+            Descarrega la plantilla JSON
+          </a>
+        </div>
       </div>
     </div>
   )
