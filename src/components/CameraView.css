@@ -1,0 +1,42 @@
+.camera-view {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.camera-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.camera-placeholder {
+  text-align: center;
+  color: #5a6380;
+  padding: 1rem;
+}
+
+.camera-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 0.5rem;
+  opacity: 0.5;
+}
+
+.camera-label {
+  font-size: 0.75rem;
+  margin: 0;
+  opacity: 0.7;
+}
+
+.camera-view:hover .camera-placeholder {
+  color: #8892b0;
+}
+
+.camera-view:hover .camera-icon {
+  opacity: 0.8;
+}

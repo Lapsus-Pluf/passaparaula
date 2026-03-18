@@ -1,0 +1,38 @@
+.timer {
+  text-align: center;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid #1a2444;
+  transition: all 0.3s ease;
+}
+
+.timer-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #5a6380;
+  margin-bottom: 0.25rem;
+}
+
+.timer-value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #ccd6f6;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.timer-low .timer-value {
+  color: #e67e22;
+}
+
+.timer-critical .timer-value {
+  color: #e74c3c;
+  animation: blink 0.5s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}

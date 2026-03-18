@@ -1,0 +1,52 @@
+.rosco-container {
+  position: relative;
+  width: 100%;
+  max-width: 550px;
+  aspect-ratio: 1;
+  margin: 0 auto;
+}
+
+.rosco-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.rosco-tile {
+  transition: all 0.3s ease;
+}
+
+.rosco-tile.is-current {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.75;
+  }
+}
+
+.rosco-letter {
+  font-family: 'Inter', sans-serif;
+  pointer-events: none;
+  user-select: none;
+}
+
+.rosco-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 55%;
+  height: 55%;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 10, 46, 0.6);
+  border: 2px solid #1a2444;
+}

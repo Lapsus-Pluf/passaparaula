@@ -1,0 +1,162 @@
+{
+  "title": "Rosco de prova",
+  "time": 130,
+  "letters": [
+    {
+      "letter": "A",
+      "type": "starts",
+      "question": "Comença per A. Fruit de pell vermella o verda que creix als arbres.",
+      "answer": "Poma"
+    },
+    {
+      "letter": "B",
+      "type": "starts",
+      "question": "Comença per B. Esport que es juga amb una pilota taronja i cistelles.",
+      "answer": "Bàsquet"
+    },
+    {
+      "letter": "C",
+      "type": "starts",
+      "question": "Comença per C. Animal domèstic que miola.",
+      "answer": "Cat"
+    },
+    {
+      "letter": "D",
+      "type": "starts",
+      "question": "Comença per D. Dia de la setmana que ve després de dissabte.",
+      "answer": "Diumenge"
+    },
+    {
+      "letter": "E",
+      "type": "starts",
+      "question": "Comença per E. Lloc on els nens van a aprendre.",
+      "answer": "Escola"
+    },
+    {
+      "letter": "F",
+      "type": "starts",
+      "question": "Comença per F. Esport que es juga amb una pilota rodona i onze jugadors per equip.",
+      "answer": "Futbol"
+    },
+    {
+      "letter": "G",
+      "type": "starts",
+      "question": "Comença per G. Animal domèstic que borda.",
+      "answer": "Gos"
+    },
+    {
+      "letter": "H",
+      "type": "contains",
+      "question": "Conté la H. Lloc on van les persones malaltes.",
+      "answer": "Hospital"
+    },
+    {
+      "letter": "I",
+      "type": "starts",
+      "question": "Comença per I. Estació de l'any en què fa més fred.",
+      "answer": "Hivern"
+    },
+    {
+      "letter": "J",
+      "type": "starts",
+      "question": "Comença per J. Activitat que fan els nens per divertir-se.",
+      "answer": "Joc"
+    },
+    {
+      "letter": "K",
+      "type": "contains",
+      "question": "Conté la K. Unitat de pes equivalent a mil grams.",
+      "answer": "Kilogram"
+    },
+    {
+      "letter": "L",
+      "type": "starts",
+      "question": "Comença per L. Idioma que parlem a Catalunya.",
+      "answer": "Llengua"
+    },
+    {
+      "letter": "M",
+      "type": "starts",
+      "question": "Comença per M. Gran extensió d'aigua salada.",
+      "answer": "Mar"
+    },
+    {
+      "letter": "N",
+      "type": "starts",
+      "question": "Comença per N. Fenomen meteorològic de cristalls de gel blancs.",
+      "answer": "Neu"
+    },
+    {
+      "letter": "O",
+      "type": "starts",
+      "question": "Comença per O. Gran massa d'aigua que cobreix la major part del planeta.",
+      "answer": "Oceà"
+    },
+    {
+      "letter": "P",
+      "type": "starts",
+      "question": "Comença per P. Aliment bàsic fet amb farina i aigua al forn.",
+      "answer": "Pa"
+    },
+    {
+      "letter": "Q",
+      "type": "starts",
+      "question": "Comença per Q. Producte lacti que es fa a partir de la llet.",
+      "answer": "Formatge"
+    },
+    {
+      "letter": "R",
+      "type": "starts",
+      "question": "Comença per R. Aparell que rep ones electromagnètiques i emet so.",
+      "answer": "Ràdio"
+    },
+    {
+      "letter": "S",
+      "type": "starts",
+      "question": "Comença per S. Astre que il·lumina la Terra durant el dia.",
+      "answer": "Sol"
+    },
+    {
+      "letter": "T",
+      "type": "starts",
+      "question": "Comença per T. Vehicle que circula sobre rails.",
+      "answer": "Tren"
+    },
+    {
+      "letter": "U",
+      "type": "starts",
+      "question": "Comença per U. Institució educativa d'ensenyament superior.",
+      "answer": "Universitat"
+    },
+    {
+      "letter": "V",
+      "type": "starts",
+      "question": "Comença per V. Líquid que es fa amb raïm.",
+      "answer": "Vi"
+    },
+    {
+      "letter": "W",
+      "type": "contains",
+      "question": "Conté la W. Xarxa mundial que connecta ordinadors.",
+      "answer": "Web"
+    },
+    {
+      "letter": "X",
+      "type": "starts",
+      "question": "Comença per X. Xarxa per pescar o esport amb raqueta.",
+      "answer": "Xarxa"
+    },
+    {
+      "letter": "Y",
+      "type": "contains",
+      "question": "Conté la Y. Producte lacti fermentat que es menja amb cullera.",
+      "answer": "Iogurt"
+    },
+    {
+      "letter": "Z",
+      "type": "starts",
+      "question": "Comença per Z. Lloc on es conserven animals salvatges.",
+      "answer": "Zoo"
+    }
+  ]
+}
