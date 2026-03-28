@@ -1,105 +1,82 @@
 /* ─── Page shell ───────────────────────────────────────────────── */
 .game-screen {
   height: 100vh;
-  padding: 1.25rem 1.75rem;
+  padding: 0.75rem 1.25rem 0.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.5rem;
   overflow: hidden;
-  /* Stay inside the viewport — never cause horizontal scroll */
   width: 100%;
   box-sizing: border-box;
 }
 
-.game-question {
+/* ─── Header: timer | question | score ─────────────────────────── */
+.game-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid #1a2444;
+  border-radius: 12px;
+}
+
+.game-header-timer {
   flex-shrink: 0;
 }
 
-/* ─── Main area: CSS grid guarantees the sidebar never overflows ── */
-.game-main {
+.game-header-question {
   flex: 1;
-  min-height: 0;           /* allow grid row to shrink inside flex parent */
-  display: grid;
-  grid-template-columns: 1fr 272px;
-  gap: 1.75rem;
-  overflow: hidden;
+  min-width: 0;
 }
 
-.game-rosco {
-  min-width: 0;
+.game-header-score {
+  flex-shrink: 0;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.header-score-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 36px;
+  padding: 0.3rem 0.5rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid #1a2444;
+}
+
+.header-score-value {
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.header-score-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  opacity: 0.6;
+  margin-top: 0.1rem;
+}
+
+.header-score-item.score-correct .header-score-value  { color: #2ecc71; }
+.header-score-item.score-correct .header-score-label  { color: #2ecc71; }
+.header-score-item.score-incorrect .header-score-value { color: #e74c3c; }
+.header-score-item.score-incorrect .header-score-label { color: #e74c3c; }
+.header-score-item.score-remaining .header-score-value { color: #a8b2d1; }
+.header-score-item.score-remaining .header-score-label { color: #a8b2d1; }
+
+/* ─── Arena: rosco ──────────────────────────────────────────────── */
+.game-arena {
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-}
-
-/* ─── Sidebar ─────────────────────────────────────────────────── */
-.game-sidebar {
-  /* width comes from the grid column — no explicit width needed */
-  display: flex;
-  flex-direction: column;
-  gap: 1.1rem;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding-right: 3px;   /* room for scrollbar thumb */
-}
-
-/* ─── Answer chips ────────────────────────────────────────────── */
-.answer-log {
-  padding: 0.75rem;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid #1a2444;
-}
-
-.answer-log-title {
-  margin: 0 0 0.5rem;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: #5a6380;
-}
-
-.answer-log-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-}
-
-.answer-log-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 20px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  white-space: nowrap;
-  max-width: 100%;
-}
-
-.answer-log-chip-letter {
-  font-weight: 800;
-  font-size: 0.8rem;
-}
-
-.answer-log-chip-answer {
-  font-weight: 500;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.answer-log-chip.chip-correct {
-  background: rgba(46, 204, 113, 0.12);
-  border: 1px solid rgba(46, 204, 113, 0.3);
-  color: #2ecc71;
-}
-
-.answer-log-chip.chip-incorrect {
-  background: rgba(231, 76, 60, 0.12);
-  border: 1px solid rgba(231, 76, 60, 0.3);
-  color: #e74c3c;
+  gap: 0.6rem;
 }
 
 /* ─── Camera zoom bar (below rosco) ──────────────────────────── */
@@ -157,6 +134,63 @@
   color: #667eea;
 }
 
+/* ─── Footer: controls + answer log ──────────────────────────── */
+.game-footer {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+/* ─── Answer chips ────────────────────────────────────────────── */
+.answer-log {
+  padding: 0.4rem 0.75rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid #1a2444;
+}
+
+.answer-log-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.answer-log-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  max-width: 180px;
+}
+
+.answer-log-chip-letter {
+  font-weight: 800;
+  font-size: 0.78rem;
+}
+
+.answer-log-chip-answer {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.answer-log-chip.chip-correct {
+  background: rgba(46, 204, 113, 0.12);
+  border: 1px solid rgba(46, 204, 113, 0.3);
+  color: #2ecc71;
+}
+
+.answer-log-chip.chip-incorrect {
+  background: rgba(231, 76, 60, 0.12);
+  border: 1px solid rgba(231, 76, 60, 0.3);
+  color: #e74c3c;
+}
+
 /* ─── Pause-on-action reveal overlay ─────────────────────────── */
 .pause-reveal-overlay {
   position: fixed;
@@ -165,7 +199,6 @@
   align-items: center;
   justify-content: center;
   z-index: 200;
-  /* Solid dim — NO blur so the game state shows through cleanly */
   background: rgba(4, 4, 20, 0.80);
   cursor: pointer;
 }
@@ -256,22 +289,14 @@
 }
 
 /* ─── Responsive ─────────────────────────────────────────────── */
-@media (max-width: 860px) {
-  .game-main {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-    overflow-y: auto;
+@media (max-width: 600px) {
+  .game-header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
 
-  .game-rosco {
-    order: -1;
-    max-width: 420px;
-    margin: 0 auto;
-    width: 100%;
-  }
-
-  .game-sidebar {
-    max-height: none;
-    overflow: visible;
+  .game-header-question {
+    order: 3;
+    flex-basis: 100%;
   }
 }

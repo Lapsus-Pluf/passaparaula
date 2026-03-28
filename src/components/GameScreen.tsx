@@ -35,6 +35,7 @@ export function GameScreen({ questionsFile, initialTime, onFinish }: GameScreenP
   const camera = useCamera()
 
   const [pauseOnAction, setPauseOnAction] = useState(true)
+  const [pauseOnPass, setPauseOnPass] = useState(false)
   const [answerLog, setAnswerLog] = useState<AnswerLogEntry[]>([])
   const [isFinished, setIsFinished] = useState(false)
   const [pauseReveal, setPauseReveal] = useState<PauseReveal | null>(null)
@@ -119,11 +120,11 @@ export function GameScreen({ questionsFile, initialTime, onFinish }: GameScreenP
 
   const handlePass = useCallback(() => {
     if (game.phase !== 'playing') return
-    if (pauseOnAction) pendingPauseRef.current = true
+    // Only trigger a pause if pauseOnAction is on AND the pauseOnPass sub-option is also on
+    if (pauseOnAction && pauseOnPass) pendingPauseRef.current = true
     game.passLetter()
-  }, [game, pauseOnAction])
+  }, [game, pauseOnAction, pauseOnPass])
 
-  const finishReason: 'timeout' | 'completed' = timer.timeLeft <= 0 ? 'timeout' : 'completed'
   const handlePlayAgain = useCallback(() => onFinish(), [onFinish])
 
   // Keyboard shortcuts
@@ -162,101 +163,115 @@ export function GameScreen({ questionsFile, initialTime, onFinish }: GameScreenP
 
   return (
     <div className="game-screen">
-      <div className="game-question">
-        <QuestionDisplay
-          question={game.currentQuestion?.question ?? null}
-          letter={game.currentQuestion?.letter ?? null}
-          isPaused={game.phase === 'paused'}
-          isIdle={game.phase === 'idle'}
-          isFinished={isFinished}
-        />
-      </div>
-
-      <div className="game-main">
-        {/* ── Left: rosco + camera zoom bar ── */}
-        <div className="game-rosco">
-          <Rosco
-            letters={game.letters}
-            currentIndex={game.currentIndex}
-            cameraElement={
-              <CameraView
-                setVideoRef={camera.setVideoElement}
-                isActive={camera.isActive}
-                onToggle={camera.toggle}
-                cssZoom={cssZoom}
-              />
-            }
-          />
-
-          {/* Zoom controls — shown below the rosco only when camera is active */}
-          {camera.isActive && (
-            <div className="camera-zoom-bar">
-              <button
-                className="camera-zoom-btn"
-                onClick={camera.zoomOut}
-                disabled={camera.zoomLevel <= 1}
-                title="Allunyar"
-              >
-                −
-              </button>
-              <span
-                className="camera-zoom-level"
-                onClick={camera.resetZoom}
-                title="Restablir zoom"
-              >
-                {camera.zoomLevel.toFixed(2).replace(/\.?0+$/, '')}×
-              </span>
-              <button
-                className="camera-zoom-btn"
-                onClick={camera.zoomIn}
-                disabled={camera.zoomLevel >= 4}
-                title="Apropar"
-              >
-                +
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* ── Right: sidebar ── */}
-        <div className="game-sidebar">
+      {/* ── Header: timer + question + score ── */}
+      <header className="game-header">
+        <div className="game-header-timer">
           <Timer timeLeft={timer.timeLeft} isRunning={timer.isRunning} />
-          <Controls
-            phase={game.phase}
-            stats={game.stats}
-            isFinished={isFinished}
-            onStart={handleStart}
-            onCorrect={handleCorrect}
-            onIncorrect={handleIncorrect}
-            onPass={handlePass}
-            onPause={handlePause}
-            onResume={handleResume}
-            pauseOnAction={pauseOnAction}
-            onTogglePauseOnAction={() => setPauseOnAction((prev) => !prev)}
-            onPlayAgain={handlePlayAgain}
-            finishReason={finishReason}
-          />
-
-          {/* Answer chips — compact wrap, no scroll */}
-          {answerLog.length > 0 && (
-            <div className="answer-log">
-              <h4 className="answer-log-title">Respostes</h4>
-              <div className="answer-log-chips">
-                {answerLog.map((entry, i) => (
-                  <span
-                    key={i}
-                    className={`answer-log-chip chip-${entry.status}`}
-                    title={`${entry.letter}: ${entry.answer}`}
-                  >
-                    <span className="answer-log-chip-letter">{entry.letter}</span>
-                    <span className="answer-log-chip-answer">{entry.answer}</span>
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
+        <div className="game-header-question">
+          <QuestionDisplay
+            question={game.currentQuestion?.question ?? null}
+            letter={game.currentQuestion?.letter ?? null}
+            isPaused={game.phase === 'paused'}
+            isIdle={game.phase === 'idle'}
+            isFinished={isFinished}
+          />
+        </div>
+        <div className="game-header-score">
+          <div className="header-score-item score-correct">
+            <span className="header-score-value">{game.stats.correct}</span>
+            <span className="header-score-label">✓</span>
+          </div>
+          <div className="header-score-item score-incorrect">
+            <span className="header-score-value">{game.stats.incorrect}</span>
+            <span className="header-score-label">✗</span>
+          </div>
+          <div className="header-score-item score-remaining">
+            <span className="header-score-value">{game.stats.remaining}</span>
+            <span className="header-score-label">~</span>
+          </div>
+        </div>
+      </header>
+
+      {/* ── Arena: rosco centered ── */}
+      <div className="game-arena">
+        <Rosco
+          letters={game.letters}
+          currentIndex={game.currentIndex}
+          cameraElement={
+            <CameraView
+              setVideoRef={camera.setVideoElement}
+              isActive={camera.isActive}
+              onToggle={camera.toggle}
+              cssZoom={cssZoom}
+            />
+          }
+        />
+
+        {/* Zoom controls — shown below the rosco only when camera is active */}
+        {camera.isActive && (
+          <div className="camera-zoom-bar">
+            <button
+              className="camera-zoom-btn"
+              onClick={camera.zoomOut}
+              disabled={camera.zoomLevel <= 1}
+              title="Allunyar"
+            >
+              −
+            </button>
+            <span
+              className="camera-zoom-level"
+              onClick={camera.resetZoom}
+              title="Restablir zoom"
+            >
+              {camera.zoomLevel.toFixed(2).replace(/\.?0+$/, '')}×
+            </span>
+            <button
+              className="camera-zoom-btn"
+              onClick={camera.zoomIn}
+              disabled={camera.zoomLevel >= 4}
+              title="Apropar"
+            >
+              +
+            </button>
+          </div>
+        )}
       </div>
+
+      {/* ── Footer: action buttons + settings + answer chips ── */}
+      <footer className="game-footer">
+        <Controls
+          phase={game.phase}
+          onStart={handleStart}
+          onCorrect={handleCorrect}
+          onIncorrect={handleIncorrect}
+          onPass={handlePass}
+          onPause={handlePause}
+          onResume={handleResume}
+          pauseOnAction={pauseOnAction}
+          onTogglePauseOnAction={() => setPauseOnAction((prev) => !prev)}
+          pauseOnPass={pauseOnPass}
+          onTogglePauseOnPass={() => setPauseOnPass((prev) => !prev)}
+        />
+
+        {/* Answer chips — compact wrap, no scroll */}
+        {answerLog.length > 0 && (
+          <div className="answer-log">
+            <div className="answer-log-chips">
+              {answerLog.map((entry, i) => (
+                <span
+                  key={i}
+                  className={`answer-log-chip chip-${entry.status}`}
+                  title={`${entry.letter}: ${entry.answer}`}
+                >
+                  <span className="answer-log-chip-letter">{entry.letter}</span>
+                  <span className="answer-log-chip-answer">{entry.answer}</span>
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+      </footer>
 
       {/* ── Pause reveal overlay ── */}
       {pauseReveal && game.phase === 'paused' && (

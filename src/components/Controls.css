@@ -1,64 +1,33 @@
+/* ─── Controls shell ─────────────────────────────────────────── */
 .controls {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 0.4rem;
 }
 
-/* Score panel */
-.score-panel {
+/* ─── Action buttons: horizontal row ─────────────────────────── */
+.controls-actions {
   display: flex;
-  gap: 0.75rem;
-}
-
-.score-item {
-  flex: 1;
-  text-align: center;
-  padding: 0.75rem 0.5rem;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid #1a2444;
-}
-
-.score-value {
-  display: block;
-  font-size: 1.6rem;
-  font-weight: 800;
-  line-height: 1;
-  margin-bottom: 0.2rem;
-}
-
-.score-label {
-  display: block;
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #5a6380;
-}
-
-.score-correct .score-value { color: #2ecc71; }
-.score-incorrect .score-value { color: #e74c3c; }
-.score-remaining .score-value { color: #a8b2d1; }
-
-/* Action buttons */
-.action-buttons {
-  display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 0.5rem;
+  align-items: center;
 }
 
 .btn {
-  display: block;
-  width: 100%;
-  padding: 0.7rem 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem;
   border: none;
   border-radius: 10px;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: inherit;
   text-transform: uppercase;
   letter-spacing: 0.03em;
+  white-space: nowrap;
 }
 
 .btn:hover {
@@ -69,11 +38,26 @@
   transform: translateY(0);
 }
 
+.btn kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.1rem 0.4rem;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-family: inherit;
+  font-size: 0.7rem;
+  color: inherit;
+  opacity: 0.75;
+  font-weight: 700;
+}
+
 .btn-start {
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
-  font-size: 1.1rem;
-  padding: 1rem;
+  font-size: 1rem;
+  padding: 0.65rem 1.5rem;
 }
 
 .btn-start:hover {
@@ -123,114 +107,53 @@
 .btn-resume {
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
-  font-size: 1.05rem;
-  padding: 0.9rem;
+  font-size: 0.95rem;
+  padding: 0.65rem 1.5rem;
 }
 
 .btn-resume:hover {
   box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
 
-/* Finished panel */
-.finished-panel {
-  text-align: center;
-  padding: 1rem;
-  border-radius: 12px;
-  background: rgba(102, 126, 234, 0.08);
-  border: 1px solid rgba(102, 126, 234, 0.2);
-}
-
-.finished-title {
-  margin: 0 0 0.75rem;
-  font-size: 1.1rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, #667eea, #f1c40f);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.btn-play-again {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  font-size: 0.95rem;
-  padding: 0.7rem 1.5rem;
-}
-
-.btn-play-again:hover {
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-}
-
-/* Pause-on-action toggle */
-.pause-on-action-toggle {
+/* ─── Settings row ───────────────────────────────────────────── */
+.controls-settings {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   gap: 0.5rem;
+  align-items: center;
+}
+
+.setting-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   cursor: pointer;
-  padding: 0.5rem 0.75rem;
+  padding: 0.3rem 0.6rem;
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid #1a2444;
   transition: background 0.2s;
 }
 
-.pause-on-action-toggle:hover {
+.setting-toggle:hover {
   background: rgba(255, 255, 255, 0.04);
 }
 
-.pause-on-action-toggle input[type="checkbox"] {
+.setting-toggle input[type="checkbox"] {
   accent-color: #667eea;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   cursor: pointer;
 }
 
 .toggle-label {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: #8892b0;
+  user-select: none;
 }
 
-/* Keyboard legend */
-.keyboard-legend {
-  padding: 1rem;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid #1a2444;
-}
-
-.legend-title {
-  margin: 0 0 0.6rem;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: #5a6380;
-}
-
-.legend-items {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-size: 0.8rem;
-  color: #8892b0;
-}
-
-.legend-item kbd {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 32px;
-  padding: 0.15rem 0.5rem;
-  border-radius: 5px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid #2d3a5c;
-  font-family: inherit;
-  font-size: 0.75rem;
-  color: #a8b2d1;
-  font-weight: 600;
+/* Sub-option is indented to signal it's nested */
+.setting-toggle-sub {
+  margin-left: 0.5rem;
+  border-left: 2px solid #1e2d52;
 }

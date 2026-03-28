@@ -163,3 +163,19 @@ passaparaula/
 | M       | Mark incorrect      |
 | P       | Pass (skip letter)  |
 | Space   | Pause / Resume      |
+
+## Version Management
+
+The app version is stored in **two places** that must be kept in sync:
+
+- `src/version.ts` — exports `APP_VERSION` (shown in the UI)
+- `package.json` — `"version"` field
+
+**Rule: increment the version at the end of every change session.**
+
+Use semantic versioning (`MAJOR.MINOR.PATCH`):
+- `PATCH` bump for bug fixes and small UI tweaks
+- `MINOR` bump for new features or significant redesigns
+- `MAJOR` bump for breaking changes to the questions format or complete rewrites
+
+Current version: **0.5.0**
