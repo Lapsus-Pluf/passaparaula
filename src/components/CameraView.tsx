@@ -4,21 +4,45 @@ interface CameraViewProps {
   setVideoRef: (el: HTMLVideoElement | null) => void
   isActive: boolean
   onToggle: () => void
+  /** Software zoom factor applied via CSS scale (1 = no zoom) */
+  cssZoom?: number
 }
 
-export function CameraView({ setVideoRef, isActive, onToggle }: CameraViewProps) {
+export function CameraView({
+  setVideoRef,
+  isActive,
+  onToggle,
+  cssZoom = 1,
+}: CameraViewProps) {
   return (
-    <div className="camera-view" onClick={onToggle}>
+    <div className={`camera-view${isActive ? ' camera-view--active' : ''}`}>
       {isActive ? (
-        <video
-          ref={setVideoRef}
-          className="camera-video"
-          autoPlay
-          muted
-          playsInline
-        />
+        <>
+          <video
+            ref={setVideoRef}
+            className="camera-video"
+            autoPlay
+            muted
+            playsInline
+            style={
+              cssZoom !== 1
+                ? { transform: `scaleX(-1) scale(${cssZoom})` }
+                : undefined
+            }
+          />
+          <button
+            className="camera-close-btn"
+            onClick={(e) => {
+              e.stopPropagation()
+              onToggle()
+            }}
+            title="Apagar càmera"
+          >
+            ✕
+          </button>
+        </>
       ) : (
-        <div className="camera-placeholder">
+        <div className="camera-placeholder" onClick={onToggle}>
           <svg
             viewBox="0 0 24 24"
             className="camera-icon"

@@ -1,16 +1,17 @@
 .camera-view {
   width: 100%;
   height: 100%;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .camera-video {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* default mirror; overridden by inline style when software zoom is active */
   transform: scaleX(-1);
 }
 
@@ -18,6 +19,13 @@
   text-align: center;
   color: #5a6380;
   padding: 1rem;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .camera-icon {
@@ -33,10 +41,36 @@
   opacity: 0.7;
 }
 
-.camera-view:hover .camera-placeholder {
+.camera-placeholder:hover .camera-icon {
+  opacity: 0.8;
+}
+
+.camera-placeholder:hover {
   color: #8892b0;
 }
 
-.camera-view:hover .camera-icon {
-  opacity: 0.8;
+/* Close button — visible on hover over the active camera */
+.camera-close-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.65rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+  padding: 0;
+  line-height: 1;
+}
+
+.camera-view--active:hover .camera-close-btn {
+  opacity: 1;
 }
