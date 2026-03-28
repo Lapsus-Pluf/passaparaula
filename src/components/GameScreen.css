@@ -4,8 +4,10 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .game-question {
@@ -17,26 +19,31 @@
   display: flex;
   gap: 2rem;
   align-items: flex-start;
+  min-width: 0;
 }
 
 .game-rosco {
   flex: 1;
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .game-sidebar {
-  width: 260px;
+  width: 280px;
+  min-width: 240px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  max-height: calc(100vh - 120px);
+  max-height: calc(100vh - 140px);
   overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 2px;
 }
 
-/* Answer log */
+/* Answer chips log — compact grid instead of scrolling list */
 .answer-log {
   padding: 0.75rem;
   border-radius: 10px;
@@ -52,47 +59,121 @@
   color: #5a6380;
 }
 
-.answer-log-list {
+.answer-log-chips {
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  flex-wrap: wrap;
+  gap: 0.35rem;
 }
 
-.answer-log-item {
-  display: flex;
+.answer-log-chip {
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.3rem 0.5rem;
-  border-radius: 6px;
+  gap: 0.3rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.answer-log-chip-letter {
+  font-weight: 800;
   font-size: 0.8rem;
 }
 
-.answer-log-correct {
-  background: rgba(46, 204, 113, 0.08);
+.answer-log-chip-answer {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.answer-log-incorrect {
-  background: rgba(231, 76, 60, 0.08);
-}
-
-.answer-log-letter {
-  font-weight: 700;
-  font-size: 0.75rem;
-  min-width: 20px;
-  text-align: center;
-}
-
-.answer-log-correct .answer-log-letter {
+.answer-log-chip.chip-correct {
+  background: rgba(46, 204, 113, 0.12);
+  border: 1px solid rgba(46, 204, 113, 0.3);
   color: #2ecc71;
 }
 
-.answer-log-incorrect .answer-log-letter {
+.answer-log-chip.chip-incorrect {
+  background: rgba(231, 76, 60, 0.12);
+  border: 1px solid rgba(231, 76, 60, 0.3);
   color: #e74c3c;
 }
 
-.answer-log-answer {
-  color: #a8b2d1;
-  font-size: 0.8rem;
+/* Pause-on-action answer reveal overlay */
+.pause-reveal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.pause-reveal-card {
+  pointer-events: all;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 2rem 3rem;
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+  animation: reveal-pop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.pause-reveal-card.reveal-correct {
+  background: rgba(46, 204, 113, 0.15);
+  border: 2px solid rgba(46, 204, 113, 0.5);
+  box-shadow: 0 0 60px rgba(46, 204, 113, 0.2);
+}
+
+.pause-reveal-card.reveal-incorrect {
+  background: rgba(231, 76, 60, 0.15);
+  border: 2px solid rgba(231, 76, 60, 0.5);
+  box-shadow: 0 0 60px rgba(231, 76, 60, 0.2);
+}
+
+.pause-reveal-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.pause-reveal-letter {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  opacity: 0.7;
+}
+
+.pause-reveal-card.reveal-correct .pause-reveal-letter { color: #2ecc71; }
+.pause-reveal-card.reveal-incorrect .pause-reveal-letter { color: #e74c3c; }
+
+.pause-reveal-answer {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #ccd6f6;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.pause-reveal-hint {
+  font-size: 0.75rem;
+  color: #5a6380;
+  margin-top: 0.25rem;
+}
+
+@keyframes reveal-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 @media (max-width: 900px) {
@@ -104,6 +185,7 @@
   .game-sidebar {
     width: 100%;
     max-width: 400px;
+    max-height: none;
   }
 
   .game-rosco {
