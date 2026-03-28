@@ -178,4 +178,4 @@ Use semantic versioning (`MAJOR.MINOR.PATCH`):
 - `MINOR` bump for new features or significant redesigns
 - `MAJOR` bump for breaking changes to the questions format or complete rewrites
 
-Current version: **0.6.0**
+Current version: **0.7.0**

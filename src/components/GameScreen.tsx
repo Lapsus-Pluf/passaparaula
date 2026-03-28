@@ -38,6 +38,7 @@ export function GameScreen({ questionsFile, initialTime, onFinish }: GameScreenP
   const [pauseOnPass, setPauseOnPass] = useState(false)
   const [answerLog, setAnswerLog] = useState<AnswerLogEntry[]>([])
   const [isFinished, setIsFinished] = useState(false)
+  const [pendingResults, setPendingResults] = useState(false)
   const [pauseReveal, setPauseReveal] = useState<PauseReveal | null>(null)
   const pendingPauseRef = useRef(false)
 
@@ -56,15 +57,20 @@ export function GameScreen({ questionsFile, initialTime, onFinish }: GameScreenP
     }
   }, [game.currentIndex, game.phase, game, timer])
 
-  // Game finished → stop timer + camera
+  // Game finished → stop timer + camera; if a reveal card is pending, wait for dismiss
   useEffect(() => {
-    if (game.phase === 'finished' && !isFinished) {
+    if (game.phase === 'finished' && !isFinished && !pendingResults) {
       timer.pause()
       camera.stop()
-      setIsFinished(true)
-      setPauseReveal(null)
+      pendingPauseRef.current = false
+      if (pauseReveal) {
+        // Last word: keep reveal card visible, show end-game CTA instead of jumping to results
+        setPendingResults(true)
+      } else {
+        setIsFinished(true)
+      }
     }
-  }, [game.phase, isFinished, timer, camera])
+  }, [game.phase, isFinished, pendingResults, pauseReveal, timer, camera])
 
   // When game resumes, dismiss the reveal card
   useEffect(() => {
@@ -85,6 +91,18 @@ export function GameScreen({ questionsFile, initialTime, onFinish }: GameScreenP
     game.resume()
     timer.resume()
   }, [game, timer])
+
+  // Dismiss the reveal overlay: resume game or, if end-of-game, go to results
+  const handleDismissReveal = useCallback(() => {
+    if (pendingResults) {
+      setPauseReveal(null)
+      setPendingResults(false)
+      setIsFinished(true)
+    } else {
+      game.resume()
+      timer.resume()
+    }
+  }, [pendingResults, game, timer])
 
   const handleCorrect = useCallback(() => {
     if (game.phase !== 'playing') return
@@ -132,19 +150,23 @@ export function GameScreen({ questionsFile, initialTime, onFinish }: GameScreenP
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
       const key = e.key.toLowerCase()
-      if (key === 'enter' && game.phase === 'idle') { e.preventDefault(); handleStart() }
-      else if (key === 'b' && game.phase === 'playing') { e.preventDefault(); handleCorrect() }
+      if (key === 'enter') {
+        e.preventDefault()
+        if (game.phase === 'idle') handleStart()
+        else if (pendingResults) handleDismissReveal()
+      } else if (key === 'b' && game.phase === 'playing') { e.preventDefault(); handleCorrect() }
       else if (key === 'm' && game.phase === 'playing') { e.preventDefault(); handleIncorrect() }
       else if (key === 'p' && game.phase === 'playing') { e.preventDefault(); handlePass() }
       else if (key === ' ') {
         e.preventDefault()
         if (game.phase === 'playing') handlePause()
         else if (game.phase === 'paused') handleResume()
+        else if (pendingResults) handleDismissReveal()
       }
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [game, handleStart, handlePause, handleResume, handleCorrect, handleIncorrect, handlePass])
+  }, [game, pendingResults, handleStart, handlePause, handleResume, handleDismissReveal, handleCorrect, handleIncorrect, handlePass])
 
   // Software zoom factor (hardware zoom is handled in the track itself, no CSS needed)
   const cssZoom = camera.isHardwareZoom ? 1 : camera.zoomLevel
@@ -274,8 +296,8 @@ export function GameScreen({ questionsFile, initialTime, onFinish }: GameScreenP
       </footer>
 
       {/* ── Pause reveal overlay ── */}
-      {pauseReveal && game.phase === 'paused' && (
-        <div className="pause-reveal-overlay" onClick={handleResume}>
+      {pauseReveal && (game.phase === 'paused' || pendingResults) && (
+        <div className="pause-reveal-overlay" onClick={handleDismissReveal}>
           <div
             className="pause-reveal-card"
             onClick={(e) => e.stopPropagation()}
@@ -291,7 +313,16 @@ export function GameScreen({ questionsFile, initialTime, onFinish }: GameScreenP
             <div className="pause-reveal-body">
               <div className="pause-reveal-letter">Lletra {pauseReveal.letter}</div>
               <div className="pause-reveal-answer">{pauseReveal.answer}</div>
-              <div className="pause-reveal-hint">Fes clic o prem Espai per continuar</div>
+              {pendingResults ? (
+                <>
+                  <div className="pause-reveal-game-over">Joc acabat!</div>
+                  <button className="pause-reveal-results-btn" onClick={handleDismissReveal}>
+                    Veure resultats
+                  </button>
+                </>
+              ) : (
+                <div className="pause-reveal-hint">Fes clic o prem Espai per continuar</div>
+              )}
             </div>
           </div>
         </div>
