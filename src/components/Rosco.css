@@ -1,7 +1,7 @@
 .rosco-container {
   position: relative;
-  width: 100%;
-  max-width: 550px;
+  /* Use the smallest of: full container width, 660px, or viewport height minus space for header/footer/gaps */
+  width: min(100%, 660px, calc(100vh - 210px));
   aspect-ratio: 1;
   margin: 0 auto;
 }

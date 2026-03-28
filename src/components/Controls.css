@@ -17,10 +17,10 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.55rem 1rem;
+  padding: 0.65rem 1.2rem;
   border: none;
   border-radius: 10px;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;

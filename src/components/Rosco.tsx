@@ -20,7 +20,7 @@ export function Rosco({ letters, currentIndex, cameraElement }: RoscoProps) {
   const size = 600
   const center = size / 2
   const radius = size / 2 - 40
-  const tileRadius = count <= 15 ? 26 : count <= 20 ? 24 : count <= 27 ? 22 : 18
+  const tileRadius = count <= 15 ? 30 : count <= 20 ? 28 : count <= 27 ? 25 : 20
 
   return (
     <div className="rosco-container">
