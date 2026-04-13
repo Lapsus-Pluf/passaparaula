@@ -12,6 +12,7 @@ const TIME_PRESETS = [
   { label: '45s', value: 45 },
   { label: '1m', value: 60 },
   { label: '2m', value: 120 },
+  { label: '2m 30s', value: 150 },
   { label: '3m', value: 180 },
 ] as const
 
@@ -21,7 +22,7 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
   const [fileName, setFileName] = useState<string | null>(null)
   const [data, setData] = useState<QuestionsFile | null>(null)
   const [errors, setErrors] = useState<string[]>([])
-  const [time, setTime] = useState(130)
+  const [time, setTime] = useState(150)
   const [isDragging, setIsDragging] = useState(false)
   const [customTime, setCustomTime] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -88,7 +89,7 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
   const handleCustomTimeChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value
     setCustomTime(val)
-    const n = Math.max(10, Math.min(600, Number(val) || 130))
+    const n = Math.max(10, Math.min(600, Number(val) || 150))
     setTime(n)
   }, [])
 

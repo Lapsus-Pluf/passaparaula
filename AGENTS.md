@@ -130,7 +130,7 @@ passaparaula/
 ```json
 {
   "title": "Rosco title",
-  "time": 130,
+  "time": 150,
   "letters": [
     {
       "letter": "A",
@@ -149,7 +149,7 @@ passaparaula/
 ```
 
 - `title`: string (required)
-- `time`: number in seconds (optional, default 130, range 10-600)
+- `time`: number in seconds (optional, default 150, range 10-600)
 - `letters`: array of entries (required, at least 1)
 - `type`: `"starts"` or `"contains"`
 - Letters are dynamic (rosco adapts to whatever letters are provided)
@@ -178,4 +178,4 @@ Use semantic versioning (`MAJOR.MINOR.PATCH`):
 - `MINOR` bump for new features or significant redesigns
 - `MAJOR` bump for breaking changes to the questions format or complete rewrites
 
-Current version: **0.7.0**
+Current version: **0.8.0**

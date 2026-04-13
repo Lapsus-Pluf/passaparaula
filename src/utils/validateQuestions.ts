@@ -46,10 +46,6 @@ export function validateQuestions(raw: unknown): ValidationResult {
     }
     seenLetters.add(letter)
 
-    if (item.type !== 'starts' && item.type !== 'contains') {
-      errors.push(`${prefix} (${letter}): "type" ha de ser "starts" o "contains".`)
-    }
-
     if (typeof item.question !== 'string' || item.question.trim() === '') {
       errors.push(`${prefix} (${letter}): Falta la pregunta.`)
     }
@@ -65,7 +61,6 @@ export function validateQuestions(raw: unknown): ValidationResult {
 
   const letters: QuestionEntry[] = (obj.letters as Record<string, unknown>[]).map((item) => ({
     letter: (item.letter as string).toUpperCase(),
-    type: item.type as 'starts' | 'contains',
     question: (item.question as string).trim(),
     answer: (item.answer as string).trim(),
   }))

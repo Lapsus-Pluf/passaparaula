@@ -7,7 +7,7 @@ import './App.css'
 function App() {
   const [screen, setScreen] = useState<'welcome' | 'game'>('welcome')
   const [questionsFile, setQuestionsFile] = useState<QuestionsFile | null>(null)
-  const [initialTime, setInitialTime] = useState(130)
+  const [initialTime, setInitialTime] = useState(150)
   const [gameKey, setGameKey] = useState(0)
 
   const handleStart = useCallback((data: QuestionsFile, time: number) => {

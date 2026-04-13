@@ -1,7 +1,6 @@
 /** A single question entry from the JSON file */
 export interface QuestionEntry {
   letter: string
-  type: 'starts' | 'contains'
   question: string
   answer: string
 }

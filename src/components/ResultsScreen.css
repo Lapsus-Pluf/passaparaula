@@ -202,7 +202,35 @@
   color: #5a6380;
 }
 
-/* Play again */
+/* Play again / navigation */
+.results-nav-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.back-to-rosco-button {
+  display: inline-block;
+  padding: 0.9rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border: 1px solid #2a3660;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #a8b2d1;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+}
+
+.back-to-rosco-button:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: #ccd6f6;
+  border-color: #667eea;
+}
+
 .play-again-button {
   display: inline-block;
   padding: 0.9rem 3rem;

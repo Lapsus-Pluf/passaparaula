@@ -8,9 +8,10 @@ interface ResultsScreenProps {
   timeLeft: number
   title: string
   onPlayAgain: () => void
+  onBackToRosco: () => void
 }
 
-export function ResultsScreen({ letters, stats, timeLeft, title, onPlayAgain }: ResultsScreenProps) {
+export function ResultsScreen({ letters, stats, timeLeft, title, onPlayAgain, onBackToRosco }: ResultsScreenProps) {
   const allCorrect = stats.correct === stats.total
   const answered = stats.correct + stats.incorrect
   const pct = answered > 0 ? Math.round((stats.correct / answered) * 100) : 0
@@ -126,9 +127,14 @@ export function ResultsScreen({ letters, stats, timeLeft, title, onPlayAgain }: 
           )}
         </div>
 
-        <button className="play-again-button" onClick={onPlayAgain}>
-          Tornar a jugar
-        </button>
+        <div className="results-nav-actions">
+          <button className="back-to-rosco-button" onClick={onBackToRosco}>
+            ← Tornar al rosco
+          </button>
+          <button className="play-again-button" onClick={onPlayAgain}>
+            Tornar a jugar
+          </button>
+        </div>
       </div>
     </div>
   )

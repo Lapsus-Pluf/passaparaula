@@ -9,10 +9,6 @@ interface ControlsProps {
   onPass: () => void
   onPause: () => void
   onResume: () => void
-  pauseOnAction: boolean
-  onTogglePauseOnAction: () => void
-  pauseOnPass: boolean
-  onTogglePauseOnPass: () => void
 }
 
 export function Controls({
@@ -23,10 +19,6 @@ export function Controls({
   onPass,
   onPause,
   onResume,
-  pauseOnAction,
-  onTogglePauseOnAction,
-  pauseOnPass,
-  onTogglePauseOnPass,
 }: ControlsProps) {
   const isPlaying = phase === 'playing'
   const isPaused = phase === 'paused'
@@ -69,29 +61,6 @@ export function Controls({
             <span className="btn-label">Reprendre</span>
             <kbd>Espai</kbd>
           </button>
-        )}
-      </div>
-
-      {/* ── Settings row ── */}
-      <div className="controls-settings">
-        <label className="setting-toggle">
-          <input
-            type="checkbox"
-            checked={pauseOnAction}
-            onChange={onTogglePauseOnAction}
-          />
-          <span className="toggle-label">Pausar per lletra</span>
-        </label>
-
-        {pauseOnAction && (
-          <label className="setting-toggle setting-toggle-sub">
-            <input
-              type="checkbox"
-              checked={pauseOnPass}
-              onChange={onTogglePauseOnPass}
-            />
-            <span className="toggle-label">i en passaparaula</span>
-          </label>
         )}
       </div>
     </div>

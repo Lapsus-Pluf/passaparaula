@@ -6,11 +6,18 @@ interface QuestionDisplayProps {
   isPaused: boolean
   isIdle: boolean
   isFinished: boolean
+  totalLetters?: number
 }
 
-export function QuestionDisplay({ question, letter, isPaused, isIdle, isFinished }: QuestionDisplayProps) {
+export function QuestionDisplay({ question, letter, isPaused, isIdle, isFinished, totalLetters }: QuestionDisplayProps) {
   if (isIdle) {
-    return null
+    return (
+      <div className="question-display question-idle">
+        {totalLetters !== undefined
+          ? `${totalLetters} lletres per jugar`
+          : 'Preparat per començar'}
+      </div>
+    )
   }
 
   if (isFinished) {
