@@ -21,6 +21,7 @@ export function Rosco({ letters, currentIndex, cameraElement }: RoscoProps) {
   const center = size / 2
   const radius = size / 2 - 40
   const tileRadius = count <= 15 ? 30 : count <= 20 ? 28 : count <= 27 ? 25 : 20
+  const topAnchorAngle = -Math.PI / 2
 
   return (
     <div className="rosco-container">
@@ -45,7 +46,7 @@ export function Rosco({ letters, currentIndex, cameraElement }: RoscoProps) {
 
         {/* Letter tiles around the circle */}
         {letters.map((letterState, i) => {
-          const angle = (2 * Math.PI * i) / count - Math.PI / 2
+          const angle = topAnchorAngle + (2 * Math.PI * i) / count
           const x = center + radius * Math.cos(angle)
           const y = center + radius * Math.sin(angle)
           const colors = STATUS_COLORS[letterState.status] ?? STATUS_COLORS.pending!

@@ -131,6 +131,14 @@ export function GameScreen({ questionsFile, initialTime, onFinish }: GameScreenP
   const cssZoom = camera.isHardwareZoom ? 1 : camera.zoomLevel
 
   const isFinished = game.phase === 'finished'
+  const answeredCount = game.stats.correct + game.stats.incorrect
+  const liveAccuracy = answeredCount > 0
+    ? Math.round((game.stats.correct / answeredCount) * 100)
+    : 0
+  const liveProgressText = `${answeredCount} de ${game.stats.total} respostes`
+  const liveAccuracyText = answeredCount > 0
+    ? `${liveAccuracy}% d'encerts (${game.stats.correct} de ${answeredCount} respostes)`
+    : 'Sense respostes encara'
 
   // Stats view (full screen)
   if (isFinished && endView === 'stats') {
@@ -148,129 +156,132 @@ export function GameScreen({ questionsFile, initialTime, onFinish }: GameScreenP
 
   return (
     <div className="game-screen">
-      {/* ── Header: timer + question + score ── */}
-      <header className="game-header">
-        <div className="game-header-timer">
-          <Timer timeLeft={isFinished ? finalTimeLeft : timer.timeLeft} isRunning={timer.isRunning} />
-        </div>
-        <div className="game-header-question">
-          <QuestionDisplay
-            question={game.currentQuestion?.question ?? null}
-            letter={game.currentQuestion?.letter ?? null}
-            isPaused={game.phase === 'paused'}
-            isIdle={game.phase === 'idle'}
-            isFinished={isFinished}
-            totalLetters={questionsFile.letters.length}
-          />
-        </div>
-        <div className="game-header-score">
-          <div className="header-score-item score-correct">
-            <span className="header-score-value">{game.stats.correct}</span>
-            <span className="header-score-label">✓</span>
+      <div className="game-layout">
+        <aside className="game-info-panel">
+          <div className="game-info-section">
+            <Timer timeLeft={isFinished ? finalTimeLeft : timer.timeLeft} isRunning={timer.isRunning} />
           </div>
-          <div className="header-score-item score-incorrect">
-            <span className="header-score-value">{game.stats.incorrect}</span>
-            <span className="header-score-label">✗</span>
-          </div>
-          <div className="header-score-item score-remaining">
-            <span className="header-score-value">{game.stats.remaining}</span>
-            <span className="header-score-label">~</span>
-          </div>
-        </div>
-      </header>
 
-      {/* ── Arena: rosco centered ── */}
-      <div className="game-arena">
-        <Rosco
-          letters={game.letters}
-          currentIndex={game.currentIndex}
-          cameraElement={
-            <CameraView
-              setVideoRef={camera.setVideoElement}
-              isActive={camera.isActive}
-              onToggle={camera.toggle}
-              cssZoom={cssZoom}
+          <div className="game-info-section game-info-question">
+            <QuestionDisplay
+              question={game.currentQuestion?.question ?? null}
+              letter={game.currentQuestion?.letter ?? null}
+              isPaused={game.phase === 'paused'}
+              isIdle={game.phase === 'idle'}
+              isFinished={isFinished}
+              totalLetters={questionsFile.letters.length}
             />
-          }
-        />
-
-        {/* Zoom controls — shown below the rosco only when camera is active */}
-        {camera.isActive && (
-          <div className="camera-zoom-bar">
-            <button
-              className="camera-zoom-btn"
-              onClick={camera.zoomOut}
-              disabled={camera.zoomLevel <= 1}
-              title="Allunyar"
-            >
-              −
-            </button>
-            <span
-              className="camera-zoom-level"
-              onClick={camera.resetZoom}
-              title="Restablir zoom"
-            >
-              {camera.zoomLevel.toFixed(2).replace(/\.?0+$/, '')}×
-            </span>
-            <button
-              className="camera-zoom-btn"
-              onClick={camera.zoomIn}
-              disabled={camera.zoomLevel >= 4}
-              title="Apropar"
-            >
-              +
-            </button>
           </div>
-        )}
-      </div>
 
-      {/* ── Footer ── */}
-      <footer className="game-footer">
-        {isFinished ? (
-          /* End-game banner */
-          <div className="game-finished-banner">
-            <span className="game-finished-label">Joc acabat!</span>
-            <div className="game-finished-actions">
-              <button className="btn btn-stats" onClick={() => setEndView('stats')}>
-                Veure estadístiques
-              </button>
-              <button className="btn btn-play-again" onClick={handlePlayAgain}>
-                Tornar a jugar
-              </button>
-            </div>
-          </div>
-        ) : (
-          <>
-            <Controls
-              phase={game.phase}
-              onStart={handleStart}
-              onCorrect={handleCorrect}
-              onIncorrect={handleIncorrect}
-              onPass={handlePass}
-              onPause={handlePause}
-              onResume={handleResume}
-            />
-
-            {/* Answer chips — compact wrap, no scroll */}
-            {answerLog.length > 0 && (
-              <div className="answer-log">
-                <div className="answer-log-chips">
-                  {answerLog.map((entry, i) => (
-                    <span
-                      key={i}
-                      className={`answer-log-chip chip-${entry.status}`}
-                      title={`${entry.letter}: ${entry.answer}`}
-                    >
-                      <span className="answer-log-chip-letter">{entry.letter}</span>
-                      <span className="answer-log-chip-answer">{entry.answer}</span>
-                    </span>
-                  ))}
-                </div>
+          <div className="game-info-section game-info-score">
+            <div className="game-header-score">
+              <div className="header-score-item score-correct">
+                <span className="header-score-value">{game.stats.correct}</span>
+                <span className="header-score-label">Correctes</span>
               </div>
-            )}
-          </>
-        )}
-      </footer>
+              <div className="header-score-item score-incorrect">
+                <span className="header-score-value">{game.stats.incorrect}</span>
+                <span className="header-score-label">Incorrectes</span>
+              </div>
+              <div className="header-score-item score-remaining">
+                <span className="header-score-value">{game.stats.remaining}</span>
+                <span className="header-score-label">Sense respondre</span>
+              </div>
+            </div>
+            <p className="game-info-progress">{liveProgressText}</p>
+            <p className="game-info-accuracy">{liveAccuracyText}</p>
+          </div>
+        </aside>
+
+        <main className="game-rosco-panel">
+          <Rosco
+            letters={game.letters}
+            currentIndex={game.currentIndex}
+            cameraElement={
+              <CameraView
+                setVideoRef={camera.setVideoElement}
+                isActive={camera.isActive}
+                onToggle={camera.toggle}
+                cssZoom={cssZoom}
+              />
+            }
+          />
+        </main>
+
+        <aside className="game-actions-panel">
+          {isFinished ? (
+            <div className="game-finished-banner">
+              <span className="game-finished-label">Joc acabat!</span>
+              <div className="game-finished-actions">
+                <button className="btn btn-stats" onClick={() => setEndView('stats')}>
+                  Veure estadístiques
+                </button>
+                <button className="btn btn-play-again" onClick={handlePlayAgain}>
+                  Tornar a jugar
+                </button>
+              </div>
+            </div>
+          ) : (
+            <>
+              <Controls
+                phase={game.phase}
+                onStart={handleStart}
+                onCorrect={handleCorrect}
+                onIncorrect={handleIncorrect}
+                onPass={handlePass}
+                onPause={handlePause}
+                onResume={handleResume}
+              />
+
+              {camera.isActive && (
+                <div className="camera-zoom-bar">
+                  <button
+                    className="camera-zoom-btn"
+                    onClick={camera.zoomOut}
+                    disabled={camera.zoomLevel <= 1}
+                    title="Allunyar"
+                  >
+                    −
+                  </button>
+                  <span
+                    className="camera-zoom-level"
+                    onClick={camera.resetZoom}
+                    title="Restablir zoom"
+                  >
+                    {camera.zoomLevel.toFixed(2).replace(/\.?0+$/, '')}×
+                  </span>
+                  <button
+                    className="camera-zoom-btn"
+                    onClick={camera.zoomIn}
+                    disabled={camera.zoomLevel >= 4}
+                    title="Apropar"
+                  >
+                    +
+                  </button>
+                </div>
+              )}
+
+              {answerLog.length > 0 && (
+                <div className="answer-log">
+                  <div className="answer-log-title">Respostes ({answerLog.length})</div>
+                  <div className="answer-log-chips">
+                    {answerLog.map((entry, i) => (
+                      <span
+                        key={i}
+                        className={`answer-log-chip chip-${entry.status}`}
+                        title={`${entry.letter}: ${entry.answer}`}
+                      >
+                        <span className="answer-log-chip-letter">{entry.letter}</span>
+                        <span className="answer-log-chip-answer">{entry.answer}</span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </aside>
+      </div>
     </div>
   )
 }
