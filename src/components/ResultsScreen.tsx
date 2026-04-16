@@ -28,6 +28,8 @@ export function ResultsScreen({ letters, stats, timeLeft, title, onPlayAgain, on
     () => letters.filter((l) => l.status === 'passed' || l.status === 'pending' || l.status === 'current'),
     [letters]
   )
+  const unansweredCount = unansweredLetters.length
+  const hasUnanswered = unansweredCount > 0
 
   return (
     <div className="results">
@@ -38,7 +40,7 @@ export function ResultsScreen({ letters, stats, timeLeft, title, onPlayAgain, on
         <p className="results-subtitle">{title}</p>
 
         {/* Stats summary */}
-        <div className="results-stats">
+        <div className={`results-main-stats ${hasUnanswered ? 'results-main-stats-three' : 'results-main-stats-two'}`}>
           <div className="stat stat-correct">
             <span className="stat-value">{stats.correct}</span>
             <span className="stat-label">Correctes</span>
@@ -47,27 +49,39 @@ export function ResultsScreen({ letters, stats, timeLeft, title, onPlayAgain, on
             <span className="stat-value">{stats.incorrect}</span>
             <span className="stat-label">Incorrectes</span>
           </div>
-          <div className="stat stat-passed">
-            <span className="stat-value">{unansweredLetters.length}</span>
-            <span className="stat-label">Sense respondre</span>
+          {hasUnanswered && (
+            <div className="stat stat-passed">
+              <span className="stat-value">{unansweredCount}</span>
+              <span className="stat-label">Sense respondre</span>
+            </div>
+          )}
+        </div>
+
+        <div className="results-meta-stats">
+          <div className="meta-stat meta-stat-time">
+            <span className="meta-stat-value">{timeLeft}s</span>
+            <span className="meta-stat-label">Temps restant</span>
           </div>
-          <div className="stat stat-time">
-            <span className="stat-value">{timeLeft}s</span>
-            <span className="stat-label">Temps restant</span>
+          <div className="meta-stat">
+            <span className="meta-stat-value">{stats.total}</span>
+            <span className="meta-stat-label">Lletres totals</span>
           </div>
         </div>
 
         {/* Correctness percentage bar */}
         <div className="results-pct-row">
+          <div className="results-pct-main">
+            <span className="results-pct-value">{pct}%</span>
+            <span className="results-pct-label">
+              d'encerts ({stats.correct} de {answered} respostes)
+            </span>
+          </div>
           <div className="results-pct-bar-bg">
             <div
               className="results-pct-bar-fill"
               style={{ width: `${pct}%` }}
             />
           </div>
-          <span className="results-pct-label">
-            {pct}% d'encerts ({stats.correct} de {answered} respostes)
-          </span>
         </div>
 
         {/* Grouped breakdown */}

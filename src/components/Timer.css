@@ -1,22 +1,22 @@
 .timer {
   text-align: center;
-  padding: 0.75rem 1.25rem;
-  border-radius: 12px;
+  padding: clamp(0.75rem, 0.62rem + 0.25vw, 1.2rem) clamp(1.1rem, 0.9rem + 0.45vw, 1.8rem);
+  border-radius: clamp(12px, 10px + 0.3vw, 18px);
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid #1a2444;
   transition: all 0.3s ease;
 }
 
 .timer-label {
-  font-size: 0.7rem;
+  font-size: clamp(0.72rem, 0.58rem + 0.16vw, 0.96rem);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: #5a6380;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.25rem;
 }
 
 .timer-value {
-  font-size: 3rem;
+  font-size: clamp(3rem, 2.35rem + 1.1vw, 4.8rem);
   font-weight: 800;
   color: #ccd6f6;
   font-variant-numeric: tabular-nums;
@@ -35,4 +35,14 @@
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.4; }
+}
+
+@media (max-width: 600px) {
+  .timer {
+    padding: 0.72rem 0.95rem;
+  }
+
+  .timer-value {
+    font-size: 2.6rem;
+  }
 }

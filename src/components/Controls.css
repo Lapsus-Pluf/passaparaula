@@ -2,25 +2,25 @@
 .controls {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: clamp(0.45rem, 0.35rem + 0.2vw, 0.75rem);
 }
 
 /* ─── Action buttons: horizontal row ─────────────────────────── */
 .controls-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: clamp(0.5rem, 0.4rem + 0.2vw, 0.85rem);
   align-items: center;
 }
 
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.65rem 1.2rem;
+  gap: clamp(0.5rem, 0.4rem + 0.15vw, 0.7rem);
+  padding: clamp(0.68rem, 0.54rem + 0.2vw, 1rem) clamp(1.15rem, 0.9rem + 0.35vw, 1.8rem);
   border: none;
-  border-radius: 10px;
-  font-size: 0.95rem;
+  border-radius: clamp(10px, 8px + 0.25vw, 14px);
+  font-size: clamp(0.96rem, 0.82rem + 0.22vw, 1.28rem);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -42,12 +42,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.1rem 0.4rem;
+  padding: clamp(0.12rem, 0.08rem + 0.05vw, 0.2rem) clamp(0.38rem, 0.3rem + 0.08vw, 0.54rem);
   border-radius: 5px;
   background: rgba(0, 0, 0, 0.25);
   border: 1px solid rgba(255, 255, 255, 0.15);
   font-family: inherit;
-  font-size: 0.7rem;
+  font-size: clamp(0.7rem, 0.62rem + 0.1vw, 0.88rem);
   color: inherit;
   opacity: 0.75;
   font-weight: 700;
@@ -56,8 +56,8 @@
 .btn-start {
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
-  font-size: 1rem;
-  padding: 0.65rem 1.5rem;
+  font-size: clamp(1rem, 0.88rem + 0.25vw, 1.35rem);
+  padding: clamp(0.72rem, 0.58rem + 0.2vw, 1.05rem) clamp(1.4rem, 1.15rem + 0.35vw, 1.95rem);
 }
 
 .btn-start:hover {
@@ -107,8 +107,8 @@
 .btn-resume {
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
-  font-size: 0.95rem;
-  padding: 0.65rem 1.5rem;
+  font-size: clamp(0.96rem, 0.84rem + 0.2vw, 1.26rem);
+  padding: clamp(0.72rem, 0.58rem + 0.2vw, 1.05rem) clamp(1.35rem, 1.1rem + 0.35vw, 1.9rem);
 }
 
 .btn-resume:hover {
@@ -156,4 +156,21 @@
 .setting-toggle-sub {
   margin-left: 0.5rem;
   border-left: 2px solid #1e2d52;
+}
+
+@media (max-width: 600px) {
+  .btn {
+    font-size: 0.94rem;
+    padding: 0.66rem 1.05rem;
+  }
+
+  .btn kbd {
+    font-size: 0.68rem;
+  }
+
+  .btn-start,
+  .btn-resume {
+    font-size: 1rem;
+    padding: 0.7rem 1.2rem;
+  }
 }
