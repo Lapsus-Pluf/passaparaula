@@ -17,10 +17,10 @@
   display: inline-flex;
   align-items: center;
   gap: clamp(0.5rem, 0.4rem + 0.15vw, 0.7rem);
-  padding: clamp(0.68rem, 0.54rem + 0.2vw, 1rem) clamp(1.15rem, 0.9rem + 0.35vw, 1.8rem);
+  padding: clamp(0.74rem, 0.58rem + 0.24vw, 1.12rem) clamp(1.2rem, 0.94rem + 0.45vw, 2.05rem);
   border: none;
   border-radius: clamp(10px, 8px + 0.25vw, 14px);
-  font-size: clamp(0.96rem, 0.82rem + 0.22vw, 1.28rem);
+  font-size: clamp(1rem, 0.84rem + 0.25vw, 1.4rem);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -88,6 +88,8 @@
   background: rgba(230, 126, 34, 0.15);
   color: #e67e22;
   border: 1px solid rgba(230, 126, 34, 0.3);
+  text-transform: none;
+  letter-spacing: 0.01em;
 }
 
 .btn-pass:hover {
@@ -161,7 +163,7 @@
 @media (max-width: 600px) {
   .btn {
     font-size: 0.94rem;
-    padding: 0.66rem 1.05rem;
+    padding: 0.7rem 1.1rem;
   }
 
   .btn kbd {

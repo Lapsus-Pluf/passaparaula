@@ -199,6 +199,14 @@
 .game-actions-panel .btn {
   width: 100%;
   justify-content: center;
+  min-height: clamp(54px, 48px + 0.55vw, 72px);
+  padding-inline: clamp(1.3rem, 1.05rem + 0.45vw, 2rem);
+}
+
+.game-actions-panel .btn .btn-label {
+  min-width: 0;
+  overflow: visible;
+  line-height: 1.1;
 }
 
 .game-actions-panel .controls-actions > :only-child {
@@ -239,7 +247,7 @@
   gap: 0.32rem;
   padding: clamp(0.25rem, 0.2rem + 0.1vw, 0.42rem) clamp(0.48rem, 0.36rem + 0.12vw, 0.68rem);
   border-radius: 999px;
-  font-size: clamp(0.8rem, 0.68rem + 0.16vw, 1.02rem);
+  font-size: clamp(0.92rem, 0.76rem + 0.2vw, 1.24rem);
   font-weight: 600;
   white-space: nowrap;
   max-width: 100%;
@@ -247,7 +255,7 @@
 
 .answer-log-chip-letter {
   font-weight: 800;
-  font-size: clamp(0.82rem, 0.72rem + 0.16vw, 1.06rem);
+  font-size: clamp(0.96rem, 0.82rem + 0.2vw, 1.34rem);
 }
 
 .answer-log-chip-answer {

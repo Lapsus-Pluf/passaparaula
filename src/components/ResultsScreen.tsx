@@ -14,7 +14,8 @@ interface ResultsScreenProps {
 export function ResultsScreen({ letters, stats, timeLeft, title, onPlayAgain, onBackToRosco }: ResultsScreenProps) {
   const allCorrect = stats.correct === stats.total
   const answered = stats.correct + stats.incorrect
-  const pct = answered > 0 ? Math.round((stats.correct / answered) * 100) : 0
+  const respondedPct = stats.total > 0 ? Math.round((answered / stats.total) * 100) : 0
+  const correctOfRespondedPct = answered > 0 ? Math.round((stats.correct / answered) * 100) : 0
 
   const correctLetters = useMemo(
     () => letters.filter((l) => l.status === 'correct'),
@@ -30,6 +31,43 @@ export function ResultsScreen({ letters, stats, timeLeft, title, onPlayAgain, on
   )
   const unansweredCount = unansweredLetters.length
   const hasUnanswered = unansweredCount > 0
+
+  const breakdownGroups: Array<{
+    key: 'correct' | 'incorrect' | 'unanswered'
+    title: string
+    titleClass: string
+    itemClass: string
+    letters: LetterState[]
+    emptyText: string
+  }> = [
+    {
+      key: 'correct',
+      title: `Correctes (${correctLetters.length})`,
+      titleClass: 'breakdown-group-correct',
+      itemClass: 'breakdown-correct',
+      letters: correctLetters,
+      emptyText: 'Cap resposta correcta',
+    },
+    {
+      key: 'incorrect',
+      title: `Incorrectes (${incorrectLetters.length})`,
+      titleClass: 'breakdown-group-incorrect',
+      itemClass: 'breakdown-incorrect',
+      letters: incorrectLetters,
+      emptyText: 'Cap resposta incorrecta',
+    },
+  ]
+
+  if (hasUnanswered) {
+    breakdownGroups.push({
+      key: 'unanswered',
+      title: `Sense respondre (${unansweredCount})`,
+      titleClass: 'breakdown-group-passed',
+      itemClass: 'breakdown-passed',
+      letters: unansweredLetters,
+      emptyText: 'No hi ha lletres pendents',
+    })
+  }
 
   return (
     <div className="results">
@@ -68,77 +106,58 @@ export function ResultsScreen({ letters, stats, timeLeft, title, onPlayAgain, on
           </div>
         </div>
 
-        {/* Correctness percentage bar */}
-        <div className="results-pct-row">
-          <div className="results-pct-main">
-            <span className="results-pct-value">{pct}%</span>
-            <span className="results-pct-label">
-              d'encerts ({stats.correct} de {answered} respostes)
-            </span>
+        {/* Percentages */}
+        <div className="results-pct-grid">
+          <div className="results-pct-card">
+            <span className="results-pct-card-title">Respostes fetes</span>
+            <span className="results-pct-value">{respondedPct}%</span>
+            <span className="results-pct-note">{answered} de {stats.total} respostes</span>
+            <div className="results-pct-bar-bg">
+              <div
+                className="results-pct-bar-fill pct-responded-fill"
+                style={{ width: `${respondedPct}%` }}
+              />
+            </div>
           </div>
-          <div className="results-pct-bar-bg">
-            <div
-              className="results-pct-bar-fill"
-              style={{ width: `${pct}%` }}
-            />
+
+          <div className="results-pct-card">
+            <span className="results-pct-card-title">Encert sobre respostes</span>
+            <span className="results-pct-value">{correctOfRespondedPct}%</span>
+            <span className="results-pct-note">
+              {answered > 0
+                ? `${stats.correct} de ${answered} correctes`
+                : 'Sense respostes encara'}
+            </span>
+            <div className="results-pct-bar-bg">
+              <div
+                className="results-pct-bar-fill pct-accuracy-fill"
+                style={{ width: `${correctOfRespondedPct}%` }}
+              />
+            </div>
           </div>
         </div>
 
-        {/* Grouped breakdown */}
-        <div className="results-breakdown">
-          {correctLetters.length > 0 && (
-            <div className="breakdown-group">
-              <h3 className="breakdown-group-title breakdown-group-correct">
-                Correctes ({correctLetters.length})
-              </h3>
+        {/* Words breakdown by result */}
+        <div className={`results-breakdown-grid ${hasUnanswered ? 'results-breakdown-grid-three' : 'results-breakdown-grid-two'}`}>
+          {breakdownGroups.map((group) => (
+            <section key={group.key} className="breakdown-group">
+              <h3 className={`breakdown-group-title ${group.titleClass}`}>{group.title}</h3>
               <div className="breakdown-list">
-                {correctLetters.map((letter, i) => (
-                  <div key={i} className="breakdown-item breakdown-correct">
-                    <span className="breakdown-letter">{letter.entry.letter}</span>
-                    <div className="breakdown-info">
-                      <span className="breakdown-answer">{letter.entry.answer}</span>
+                {group.letters.length > 0 ? (
+                  group.letters.map((letter, i) => (
+                    <div key={`${group.key}-${letter.entry.letter}-${i}`} className={`breakdown-item ${group.itemClass}`}>
+                      <span className="breakdown-letter">{letter.entry.letter}</span>
+                      <div className="breakdown-info">
+                        <span className="breakdown-answer">{letter.entry.answer}</span>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <div className="breakdown-empty">{group.emptyText}</div>
+                )}
               </div>
-            </div>
-          )}
-
-          {incorrectLetters.length > 0 && (
-            <div className="breakdown-group">
-              <h3 className="breakdown-group-title breakdown-group-incorrect">
-                Incorrectes ({incorrectLetters.length})
-              </h3>
-              <div className="breakdown-list">
-                {incorrectLetters.map((letter, i) => (
-                  <div key={i} className="breakdown-item breakdown-incorrect">
-                    <span className="breakdown-letter">{letter.entry.letter}</span>
-                    <div className="breakdown-info">
-                      <span className="breakdown-answer">{letter.entry.answer}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {unansweredLetters.length > 0 && (
-            <div className="breakdown-group">
-              <h3 className="breakdown-group-title breakdown-group-passed">
-                Sense respondre ({unansweredLetters.length})
-              </h3>
-              <div className="breakdown-list">
-                {unansweredLetters.map((letter, i) => (
-                  <div key={i} className="breakdown-item breakdown-passed">
-                    <span className="breakdown-letter">{letter.entry.letter}</span>
-                    <div className="breakdown-info">
-                      <span className="breakdown-answer">{letter.entry.answer}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+            </section>
+          ))}
         </div>
 
         <div className="results-nav-actions">
